@@ -16,6 +16,7 @@
 
 namespace dataformat_xml;
 
+use stdClass;
 use core_text;
 use core\dataformat\base;
 
@@ -69,16 +70,16 @@ class writer extends base {
     /**
      * Write a single record
      *
-     * @param array $record
+     * @param array|stdClass $record
      * @param int $rownum
      */
     public function write_record($record, $rownum): void {
-        $record = array_combine($this->columns, $record);
+        $record = array_combine($this->columns, (array) $record);
 
         echo "<record rowNum=\"{$rownum}\">";
 
         foreach ($this->columns as $column) {
-            $columndata = self::xml_special_chars($record[$column]);
+            $columndata = self::xml_special_chars((string) $record[$column]);
 
             echo "\t<{$column}>{$columndata}</{$column}>\n";
         }
